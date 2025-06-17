@@ -1,24 +1,12 @@
+import { TChunkedSermon, TSermonMetadata } from "@/types";
 import * as fs from "fs";
 import * as path from "path";
-
-interface SermonMetadata {
-  sermonId: string;
-  title: string;
-  date: string;
-  content: string;
-}
-
-interface ChunkedSermon {
-  sermonId: string;
-  chunkId: number;
-  content: string;
-}
 
 export const formatForLLM = (
   text: string,
   fileName: string
-): SermonMetadata => {
-  const metadata: SermonMetadata = {
+): TSermonMetadata => {
+  const metadata: TSermonMetadata = {
     sermonId: fileName,
     title: "Untitled Sermon",
     date: new Date().toISOString().split("T")[0],
@@ -60,13 +48,24 @@ export const chunkTranscript = (
 export const saveChunks = (
   chunks: string[],
   fileName: string,
-  outputDir: string
+  outputDir: string,
+  metadata: {
+    topic?: string;
+    themes?: string[];
+    speaker?: string;
+    date_preached?: string;
+  } = {}
 ): void => {
+  const { topic, themes, speaker, date_preached } = metadata;
   chunks.forEach((chunk, i) => {
     const outputPath = path.join(outputDir, `${fileName}_chunk_${i}.json`);
-    const chunkData: ChunkedSermon = {
+    const chunkData: TChunkedSermon = {
       sermonId: fileName,
       chunkId: i,
+      topic,
+      themes,
+      speaker,
+      date_preached,
       content: chunk,
     };
     fs.writeFileSync(outputPath, JSON.stringify(chunkData, null, 2));

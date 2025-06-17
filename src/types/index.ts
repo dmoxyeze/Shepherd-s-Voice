@@ -1,3 +1,8 @@
-import { TTranscript } from "./transcript";
+import {
+  TTranscript,
+  TSermonEmbedding,
+  TChunkedSermon,
+  TSermonMetadata,
+} from "./transcript";
 
-export { TTranscript };
+export { TTranscript, TSermonEmbedding, TChunkedSermon, TSermonMetadata };

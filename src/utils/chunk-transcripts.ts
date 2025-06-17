@@ -23,7 +23,12 @@ const chunkTranscripts = async () => {
         fs.readFileSync(file, "utf-8")
       );
       const chunks = chunkTranscript(transcript.normalizedMessage);
-      saveChunks(chunks, sanitizeName(transcript.topic), outputDir);
+      saveChunks(chunks, sanitizeName(transcript.topic), outputDir, {
+        topic: transcript.topic,
+        themes: transcript.themes,
+        speaker: "Revd. O.T. Jacobs",
+        date_preached: new Date().toISOString(), // returns e.g. "2023-10-01T12:00:00Z"
+      });
     });
     await Promise.all(processingFilesPromises);
     console.log("All sermons processed");
