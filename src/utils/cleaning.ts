@@ -20,7 +20,7 @@ const config: CleaningConfig = {
   },
 };
 
-export function cleanTranscript(text: string): string {
+export const cleanTranscript = (text: string): string => {
   let cleaned = text;
 
   // Remove irrelevant sections
@@ -41,15 +41,21 @@ export function cleanTranscript(text: string): string {
   }
 
   return cleaned;
-}
+};
 
-export function saveCleanedTranscript(
+export const saveCleanedTranscript = (
   text: string,
   fileName: string,
   outputDir: string
-): string {
+): string => {
   const outputPath = path.join(outputDir, `${fileName}.txt`);
   fs.mkdirSync(outputDir, { recursive: true });
   fs.writeFileSync(outputPath, text);
   return outputPath;
-}
+};
+
+export const sanitizeName = (filename: string): string => {
+  return path
+    .basename(filename, path.extname(filename))
+    .replace(/[^\w-]/g, "_");
+};

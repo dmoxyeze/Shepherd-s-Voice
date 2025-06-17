@@ -3,8 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "ts-node -r tsconfig-paths/register src/index.ts",
-    "transcribe": "ts-node -r tsconfig-paths/register src/services/sermon-transcriber.ts"
+    "chunk-transcripts": "ts-node -r tsconfig-paths/register src/utils/chunk-transcripts.ts"
   },
   "keywords": [],
   "author": "",
@@ -12,9 +11,12 @@
   "description": "",
   "dependencies": {
     "dotenv": "^16.5.0",
+    "glob": "^11.0.3",
     "groq-sdk": "^0.24.0",
+    "p-limit": "3.1.0",
     "tsconfig-paths": "^4.2.0",
-    "winston": "^3.17.0"
+    "winston": "^3.17.0",
+    "zod": "^3.25.67"
   },
   "devDependencies": {
     "@types/node": "^24.0.1",

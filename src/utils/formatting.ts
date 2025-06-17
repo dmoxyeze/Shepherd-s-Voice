@@ -14,7 +14,10 @@ interface ChunkedSermon {
   content: string;
 }
 
-export function formatForLLM(text: string, fileName: string): SermonMetadata {
+export const formatForLLM = (
+  text: string,
+  fileName: string
+): SermonMetadata => {
   const metadata: SermonMetadata = {
     sermonId: fileName,
     title: "Untitled Sermon",
@@ -27,12 +30,12 @@ export function formatForLLM(text: string, fileName: string): SermonMetadata {
   fs.mkdirSync(outputDir, { recursive: true });
   fs.writeFileSync(outputPath, JSON.stringify(metadata, null, 2));
   return metadata;
-}
+};
 
-export function chunkTranscript(
+export const chunkTranscript = (
   text: string,
   maxLength: number = 500
-): string[] {
+): string[] => {
   const sentences = text.split(/(?<=[.!?])\s+/).filter(Boolean);
   const chunks: string[] = [];
   let currentChunk: string[] = [];
@@ -52,13 +55,13 @@ export function chunkTranscript(
   if (currentChunk.length) chunks.push(currentChunk.join(" "));
 
   return chunks;
-}
+};
 
-export function saveChunks(
+export const saveChunks = (
   chunks: string[],
   fileName: string,
   outputDir: string
-): void {
+): void => {
   chunks.forEach((chunk, i) => {
     const outputPath = path.join(outputDir, `${fileName}_chunk_${i}.json`);
     const chunkData: ChunkedSermon = {
@@ -68,4 +71,4 @@ export function saveChunks(
     };
     fs.writeFileSync(outputPath, JSON.stringify(chunkData, null, 2));
   });
-}
+};
