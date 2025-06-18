@@ -22,27 +22,54 @@ export const formatForLLM = (
 
 export const chunkTranscript = (
   text: string,
-  maxLength: number = 500
+  maxLength: number = 500,
+  hardMax: boolean = false
 ): string[] => {
-  const sentences = text.split(/(?<=[.!?])\s+/).filter(Boolean);
+  if (!text.trim()) return [];
+
+  const sentences = text.split(/(?<=[.!?])\s+|(?<=\n\n)/).filter(Boolean);
   const chunks: string[] = [];
   let currentChunk: string[] = [];
   let currentLength = 0;
 
   for (const sentence of sentences) {
-    const wordCount = sentence.split(/\s+/).length;
-    if (currentLength + wordCount <= maxLength) {
+    const wordCount = countWords(sentence);
+    const wouldExceed = currentLength + wordCount > maxLength;
+
+    if (!wouldExceed) {
       currentChunk.push(sentence);
       currentLength += wordCount;
     } else {
-      chunks.push(currentChunk.join(" "));
-      currentChunk = [sentence];
-      currentLength = wordCount;
+      // Handle cases where a single sentence exceeds maxLength
+      if (currentChunk.length === 0 && !hardMax) {
+        // If it's the first sentence in chunk and we're not enforcing hard max,
+        // allow it but start new chunk afterwards
+        currentChunk.push(sentence);
+        chunks.push(currentChunk.join(" "));
+        currentChunk = [];
+        currentLength = 0;
+      } else {
+        // Normal case - finalize current chunk and start new one
+        if (currentChunk.length) {
+          chunks.push(currentChunk.join(" "));
+        }
+        currentChunk = [sentence];
+        currentLength = wordCount;
+      }
     }
   }
-  if (currentChunk.length) chunks.push(currentChunk.join(" "));
+
+  // Add the last chunk if it exists
+  if (currentChunk.length) {
+    chunks.push(currentChunk.join(" "));
+  }
 
   return chunks;
+};
+
+// Helper function for accurate word counting
+const countWords = (str: string): number => {
+  return str.trim() ? str.split(/\s+/).length : 0;
 };
 
 export const saveChunks = (

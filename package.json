@@ -7,7 +7,8 @@
     "migrate:down": "knex migrate:rollback",
     "migrate:make": "knex migrate:make",
     "generate-embeddings": "ts-node -r tsconfig-paths/register src/utils/generate-embeddings.ts",
-    "chunk-transcripts": "ts-node -r tsconfig-paths/register src/utils/chunk-transcripts.ts"
+    "chunk-transcripts": "ts-node -r tsconfig-paths/register src/utils/chunk-transcripts.ts",
+    "insert-embeddings": "ts-node -r tsconfig-paths/register src/utils/insert-data-embeddings.ts"
   },
   "keywords": [],
   "author": "",

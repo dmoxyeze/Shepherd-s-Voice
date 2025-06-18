@@ -1,4 +1,7 @@
 import path from "path";
+import dotenv from "dotenv";
+dotenv.config();
+
 const ROOT_DIR = path.resolve(__dirname, "..", "..");
 const TRANSCRIPT_DIR = path.resolve(ROOT_DIR, "src", "transcripts");
 const AUDIO_DIR = path.resolve(ROOT_DIR, "sermon_audios");
