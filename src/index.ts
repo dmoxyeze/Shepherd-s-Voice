@@ -1,14 +1,6 @@
-import fs from "fs";
-import path from "path";
-import { generateSermonInsight } from "./services";
+import { PORT } from "@/config";
+import app from "@/app";
 
-const sermon = fs.readFileSync(
-  path.join(
-    __dirname,
-    "transcripts",
-    "Faith_Construction_Service_Streamed_3_months_ago.txt"
-  ),
-  "utf-8"
-);
-
-generateSermonInsight(sermon).then(console.log).catch(console.error);
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on http://localhost:${PORT}`);
+});
